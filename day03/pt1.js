@@ -6,6 +6,22 @@ const input = fs.readFileSync('./input').toString().split('\n');
 let gammaRate = '';
 let epsilonRate = '';
 
+// this loop setup is iterating through the input like this:
+//
+// [ 1, 5, 10, ],
+// [ 2, 6, 11, ],
+// [ 3, 7, 12, ],
+// [ 4, 8, 13  ]
+//
+//
+// TODO: test to see if iterating through the input like this is faster:
+//       I suspect it would be faster because of memory locality.
+//
+// [  1,  2,  3, ],
+// [  4,  5,  6, ],
+// [  7,  8,  9, ],
+// [ 10, 11, 12  ]
+//
 for(let i = 0; i < input[0].length; i++)
 {
 	let countOnes = 0;
@@ -18,6 +34,7 @@ for(let i = 0; i < input[0].length; i++)
 		}
 	}
 
+	// if more than half of the values are 1s
 	if(countOnes > input.length / 2)
 	{
 		gammaRate += '1';
