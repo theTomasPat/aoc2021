@@ -70,6 +70,18 @@ Board.prototype.winningCols = [
 	[ 4, 9, 14, 19, 24 ]
 ];
 
+Array.prototype.allIndexesOf = function(elem) {
+	let output = [];
+
+	for(let i = 0; i < this.length; i++) {
+		if(this[i] === elem) {
+			output.push(i);
+		}
+	}
+
+	return output;
+};
+
 function parseInput(input) {
 	let idx = 0;
 	let draws = '';
@@ -126,11 +138,13 @@ function playBingo(draws, boards) {
 }
 
 
-
 const input = fs.readFileSync('./testInput');
 //const input = fs.readFileSync('./input');
 
 parsedInput = parseInput(input);
 console.log(parsedInput.draws, parsedInput.boards);
+
+console.log('index of 17 in board[0]: ', parsedInput.boards[0].numbers.allIndexesOf(17));
+console.log('index of 0 in board[2]: ', parsedInput.boards[2].numbers.allIndexesOf(0));
 
 //playBingo(parsedInput.draws, parsedInput.boards);
