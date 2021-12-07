@@ -87,26 +87,33 @@ function parseInput(input) {
 	// adding 2 will skip us past the empty line after the list of draws
 	idx += 2;
 
-	// populate an array of boards
 	let curBoard = new Board([], []);
 	let curNum = '';
+	// walk through the input to populate an array of boards
 	while(idx < input.length) {
-		if(input[idx] === '\n') {
-			// if the previous idx was a '\n' also
-				// add curBoard to `boards`
-				// set curBoard to new Board
-		}
-		else if(input[idx] === ' ') {
-			// if curNum != ''
-				// convert curNum to Number and add to `curBoard.numbers`
-				// set curNum to ''
+		
+		// we only need to do something special if the current char is
+		// a '\n' or ' '
+		if(input[idx] === '\n' || input[idx] === ' ') {
+			if(input[idx] === '\n' && curNum === '') {
+				boards.push(curBoard);
+				curBoard = new Board([], []);
+			}
+			else {
+				if(curNum != '') {
+					curBoard.numbers.push(Number(curNum));
+					curNum = '';
+				}
+			}
 		}
 		else {
-			// curNum += input[idx]
+			curNum += input[idx];
 		}
 
 		idx++;
 	}
+	// be sure to add the last board as well
+	boards.push(curBoard);
 
 	return {
 		draws: draws,
