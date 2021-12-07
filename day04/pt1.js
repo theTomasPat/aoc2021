@@ -45,8 +45,7 @@ const fs = require('fs');
  *  [  4,  9, 14, 19, 24 ]
  * ]
 */
-let Board = function(width, numbers, marked) {
-	this.width = width;
+let Board = function(numbers, marked) {
 	this.numbers = numbers;
 	this.marked = marked;
 };
@@ -76,6 +75,8 @@ function parseInput(input) {
 	let draws = '';
 	let boards = [];
 
+	input = input.toString();
+
 	// populate an array of draws
 	while(input[idx] != '\n') {
 		draws += input[idx];
@@ -83,8 +84,29 @@ function parseInput(input) {
 	}
 	draws = draws.split(',').map(num => Number(num));
 
+	// adding 2 will skip us past the empty line after the list of draws
+	idx += 2;
+
 	// populate an array of boards
-	//
+	let curBoard = new Board([], []);
+	let curNum = '';
+	while(idx < input.length) {
+		if(input[idx] === '\n') {
+			// if the previous idx was a '\n' also
+				// add curBoard to `boards`
+				// set curBoard to new Board
+		}
+		else if(input[idx] === ' ') {
+			// if curNum != ''
+				// convert curNum to Number and add to `curBoard.numbers`
+				// set curNum to ''
+		}
+		else {
+			// curNum += input[idx]
+		}
+
+		idx++;
+	}
 
 	return {
 		draws: draws,
@@ -98,7 +120,7 @@ function playBingo(draws, boards) {
 
 
 
-const input = fs.readFileSync('./testInput').toString();
+const input = fs.readFileSync('./testInput');
 //const input = fs.readFileSync('./input');
 
 parsedInput = parseInput(input);
