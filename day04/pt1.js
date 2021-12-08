@@ -27,7 +27,7 @@ const fs = require('fs');
  * Winning combinations can be determined by comparing the
  * array of marked indices against the winning rows or columns:
  * 
- * Cols:
+ * Rows:
  * [
  *  [  0,  1,  2,  3,  4 ],
  *  [  5,  6,  7,  8,  9 ],
@@ -36,7 +36,7 @@ const fs = require('fs');
  *  [ 20, 21, 22, 23, 24 ]
  * ]
  * 
- * Rows:
+ * Cols:
  * [
  *  [  0,  5, 10, 15, 20 ],
  *  [  1,  6, 11, 16, 21 ],
@@ -50,8 +50,26 @@ let Board = function(numbers, marked) {
 	this.marked = marked;
 };
 
-Board.prototype.checkWin = function() {
-	return this.width;
+Board.prototype.hasWon = function() {
+	// for each of the winning rows,
+	for(let i = 0; i < this.winningRows.length; i++) {
+		// if this board's `marked` array includes each value in the current row
+		if(this.winningRows[i].every(idx => this.marked.includes(idx))) {
+			// there's a win
+			return true;
+		}
+	}
+
+	// for each of the winning cols,
+	for(let i = 0; i < this.winningCols.length; i++) {
+		// if this board's `marked` array includes each value in the current row
+		if(this.winningCols[i].every(idx => this.marked.includes(idx))) {
+			// there's a win
+			return true;
+		}
+	}
+
+	return false;
 }
 
 Board.prototype.winningRows = [
@@ -134,17 +152,42 @@ function parseInput(input) {
 }
 
 function playBingo(draws, boards) {
-	
+	// iterate through each of the draws
+	for(let i = 0; i < draws.length; i++) {
+		// mark this draw on every board as necessary
+		for(let j = 0; j < boards.length; j++) {
+		//boards.forEach(board => {
+			let markedIndices = boards[j].numbers.allIndexesOf(draws[i]);
+			if(markedIndices.length > 0) {
+				markedIndices.forEach(idx => {
+					boards[j].marked.push(idx);
+				});
+
+				// check if this board is a winner
+				if(boards[j].hasWon()) {
+					// sum the non-marked numbers on the board
+						// boards[j].numbers.filter.reduce
+					// multiply that number by the most recent draw (in this case, `i`)
+
+					return `The winning board is \n${JSON.stringify(boards[j], null, '  ')}`;
+				}
+			}
+		}
+	}
+
+	return "There is no winning board";
 }
 
 
 const input = fs.readFileSync('./testInput');
 //const input = fs.readFileSync('./input');
 
+// test parsing input
 parsedInput = parseInput(input);
 console.log(parsedInput.draws, parsedInput.boards);
 
+// test finding the index(es) of a certain number in a board
 console.log('index of 17 in board[0]: ', parsedInput.boards[0].numbers.allIndexesOf(17));
 console.log('index of 0 in board[2]: ', parsedInput.boards[2].numbers.allIndexesOf(0));
 
-//playBingo(parsedInput.draws, parsedInput.boards);
+console.log(playBingo(parsedInput.draws, parsedInput.boards));
