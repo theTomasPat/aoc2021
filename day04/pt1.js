@@ -52,18 +52,9 @@ let Board = function(numbers, marked) {
 
 Board.prototype.hasWon = function() {
 	// for each of the winning rows,
-	for(let i = 0; i < this.winningRows.length; i++) {
+	for(let i = 0; i < this.winningCombos.length; i++) {
 		// if this board's `marked` array includes each value in the current row
-		if(this.winningRows[i].every(idx => this.marked.includes(idx))) {
-			// there's a win
-			return true;
-		}
-	}
-
-	// for each of the winning cols,
-	for(let i = 0; i < this.winningCols.length; i++) {
-		// if this board's `marked` array includes each value in the current row
-		if(this.winningCols[i].every(idx => this.marked.includes(idx))) {
+		if(this.winningCombos[i].every(idx => this.marked.includes(idx))) {
 			// there's a win
 			return true;
 		}
@@ -72,15 +63,15 @@ Board.prototype.hasWon = function() {
 	return false;
 }
 
-Board.prototype.winningRows = [
+Board.prototype.winningCombos = [
+	// rows
 	[  0,  1,  2,  3,  4 ],
 	[  5,  6,  7,  8,  9 ],
 	[ 10, 11, 12, 13, 14 ],
 	[ 15, 16, 17, 18, 19 ],
-	[ 20, 21, 22, 23, 24 ]
-];
+	[ 20, 21, 22, 23, 24 ],
 
-Board.prototype.winningCols = [
+	// cols
 	[ 0, 5, 10, 15, 20 ],
 	[ 1, 6, 11, 16, 21 ],
 	[ 2, 7, 12, 17, 22 ],
@@ -101,6 +92,10 @@ Array.prototype.allIndexesOf = function(elem) {
 };
 
 function parseInput(input) {
+	// the idea is to walk through the input string, one character
+	// at a time and construct the draws and boards along the way
+
+
 	let idx = 0;
 	let draws = '';
 	let boards = [];
@@ -117,11 +112,10 @@ function parseInput(input) {
 	// adding 2 will skip us past the empty line after the list of draws
 	idx += 2;
 
+	// walk through the input to populate an array of boards
 	let curBoard = new Board([], []);
 	let curNum = '';
-	// walk through the input to populate an array of boards
 	while(idx < input.length) {
-		
 		// we only need to do something special if the current char is
 		// a '\n' or ' '
 		if(input[idx] === '\n' || input[idx] === ' ') {
