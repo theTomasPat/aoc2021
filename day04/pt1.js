@@ -156,20 +156,23 @@ function playBingo(draws, boards) {
 	for(let i = 0; i < draws.length; i++) {
 		// mark this draw on every board as necessary
 		for(let j = 0; j < boards.length; j++) {
-		//boards.forEach(board => {
 			let markedIndices = boards[j].numbers.allIndexesOf(draws[i]);
 			if(markedIndices.length > 0) {
 				markedIndices.forEach(idx => {
 					boards[j].marked.push(idx);
 				});
 
-				// check if this board is a winner
 				if(boards[j].hasWon()) {
 					// sum the non-marked numbers on the board
-						// boards[j].numbers.filter.reduce
-					// multiply that number by the most recent draw (in this case, `i`)
+					const boardSum = boards[j].numbers
+						.filter((num, idx) => boards[j].marked.includes(idx) === false)
+						.reduce((acc, val) => acc + val);
+					// multiply that number by the most recent draw (in this case, `draws[i]`)
+					const finalAnswer = boardSum * draws[i];
 
-					return `The winning board is \n${JSON.stringify(boards[j], null, '  ')}`;
+					console.log(`The winning board is: \n${JSON.stringify(boards[j])}`);
+
+					return `board sum: ${boardSum},\nlast draw: ${draws[i]},\nfinal answer: ${finalAnswer}`;
 				}
 			}
 		}
@@ -179,15 +182,11 @@ function playBingo(draws, boards) {
 }
 
 
-const input = fs.readFileSync('./testInput');
-//const input = fs.readFileSync('./input');
+//const input = fs.readFileSync('./testInput');
+const input = fs.readFileSync('./input');
 
-// test parsing input
-parsedInput = parseInput(input);
-console.log(parsedInput.draws, parsedInput.boards);
-
-// test finding the index(es) of a certain number in a board
-console.log('index of 17 in board[0]: ', parsedInput.boards[0].numbers.allIndexesOf(17));
-console.log('index of 0 in board[2]: ', parsedInput.boards[2].numbers.allIndexesOf(0));
+// parse input
+const parsedInput = parseInput(input);
+//console.log(parsedInput.draws, parsedInput.boards);
 
 console.log(playBingo(parsedInput.draws, parsedInput.boards));
